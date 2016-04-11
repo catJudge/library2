@@ -4,6 +4,7 @@ import hibernate.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import persistence.CategoryPO;
+import persistence.PostPO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,13 +45,30 @@ public class CategoryDAO {
         }
     }
 
-    public static List<CategoryPO> getAllCategory(){
+    public static List<CategoryPO> getAllCategory() {
         List<CategoryPO> list = new ArrayList<>();
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
             list = session.createQuery("from CategoryPO").list();
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public static List<PostPO> getPostsByCategoryId(Long cid) {
+        List<PostPO> list = new ArrayList<>();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            list = session.createQuery("select posts from CategoryPO where id=" + cid).list();
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {

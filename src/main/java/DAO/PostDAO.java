@@ -3,11 +3,12 @@ package DAO;
 import hibernate.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import persistence.CommentPO;
+import persistence.CategoryPO;
 import persistence.PostPO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class PostDAO {
     public static Long insertPost(PostPO postPO) {
@@ -60,13 +61,13 @@ public class PostDAO {
         return list;
     }
 
-    public static List<PostPO> getPostsByCategoryId(Long cid){
-        List<PostPO> list = new ArrayList<>();
+    public static List<CategoryPO> getCategoriesByPostId(Long pid) {
+        List<CategoryPO> list = new ArrayList<>();
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            list = session.createQuery("from PostPO where categoryId= " + cid ).list();
+            list = session.createQuery("select categories from PostPO where id=" + pid).list();
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {
@@ -76,4 +77,5 @@ public class PostDAO {
         }
         return list;
     }
+
 }

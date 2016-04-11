@@ -4,7 +4,6 @@ import hibernate.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import persistence.CommentPO;
-import persistence.PostPO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +49,7 @@ public class CommentDAO {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            list = session.createQuery("from CommentPO where postId= " + pid ).list();
+            list = session.createQuery("from CommentPO where post.id= " + pid ).list();
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {

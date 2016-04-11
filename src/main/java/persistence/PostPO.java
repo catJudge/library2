@@ -2,23 +2,40 @@ package persistence;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Collection;
 
 /**
- * Created by ovchinnikov on 10.04.2016.
+ * Created by ovchinnikov on 11.04.2016.
  */
 @Entity
 @Table(name = "post", schema = "", catalog = "java_task_blog")
 public class PostPO {
-    private Long id;
-    private String title;
-    private String text;
-    private Long categoryId;
-    private Timestamp createdDate;
-    private String email;
-
-    @GeneratedValue
     @Id
+    @GeneratedValue
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
+    private Long id;
+    @Basic
+    @Column(name = "title", nullable = true, insertable = true, updatable = true, length = 100)
+    private String title;
+    @Basic
+    @Column(name = "text", nullable = false, insertable = true, updatable = true, length = 2147483647)
+    private String text;
+    @Basic
+    @Column(name = "created_date", nullable = false, insertable = true, updatable = true)
+    private Timestamp createdDate;
+    @Basic
+    @Column(name = "email", nullable = true, insertable = true, updatable = true, length = 30)
+    private String email;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "category_post", catalog = "java_task_blog", joinColumns = {
+            @JoinColumn(name = "post_id", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "category_id",
+                    nullable = false, updatable = false)})
+    private Collection<CategoryPO> categories;
+    @OneToMany(mappedBy = "post")
+    private Collection<CommentPO> comments;
+
+
     public Long getId() {
         return id;
     }
@@ -27,8 +44,6 @@ public class PostPO {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "title", nullable = false, insertable = true, updatable = true, length = 100)
     public String getTitle() {
         return title;
     }
@@ -37,8 +52,6 @@ public class PostPO {
         this.title = title;
     }
 
-    @Basic
-    @Column(name = "text", nullable = false, insertable = true, updatable = true, length = 2147483647)
     public String getText() {
         return text;
     }
@@ -47,18 +60,6 @@ public class PostPO {
         this.text = text;
     }
 
-    @Basic
-    @Column(name = "category_id", nullable = false, insertable = true, updatable = true)
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    @Basic
-    @Column(name = "created_date", nullable = false, insertable = true, updatable = true)
     public Timestamp getCreatedDate() {
         return createdDate;
     }
@@ -67,8 +68,6 @@ public class PostPO {
         this.createdDate = createdDate;
     }
 
-    @Basic
-    @Column(name = "email", nullable = true, insertable = true, updatable = true, length = 30)
     public String getEmail() {
         return email;
     }
@@ -87,7 +86,6 @@ public class PostPO {
         if (id != null ? !id.equals(postPO.id) : postPO.id != null) return false;
         if (title != null ? !title.equals(postPO.title) : postPO.title != null) return false;
         if (text != null ? !text.equals(postPO.text) : postPO.text != null) return false;
-        if (categoryId != null ? !categoryId.equals(postPO.categoryId) : postPO.categoryId != null) return false;
         if (createdDate != null ? !createdDate.equals(postPO.createdDate) : postPO.createdDate != null) return false;
         if (email != null ? !email.equals(postPO.email) : postPO.email != null) return false;
 
@@ -99,9 +97,16 @@ public class PostPO {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (text != null ? text.hashCode() : 0);
-        result = 31 * result + (categoryId != null ? categoryId.hashCode() : 0);
         result = 31 * result + (createdDate != null ? createdDate.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         return result;
+    }
+
+    public Collection<CommentPO> getComments() {
+        return comments;
+    }
+
+    public void setComments(Collection<CommentPO> comments) {
+        this.comments = comments;
     }
 }
