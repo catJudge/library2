@@ -67,9 +67,10 @@
                 <form action="/" method="post">
                     <div class="form-group">
                         <select class="form-control" id="example-getting-started" multiple="multiple"
-                                 title="Categories">
+                                title="Categories">
                             <% for (CategoryPO categoryPO : categoryPOs) { %>
-                            <option value="<%=categoryPO.getId()%>" ><%=categoryPO.getName()%></option>
+                            <option value="<%=categoryPO.getId()%>"><%=categoryPO.getName()%>
+                            </option>
                             <% } %>
                         </select>
                         <script type="text/javascript">
@@ -94,19 +95,32 @@
                         <input type="button" id="submitBtn" class="btn middle btn-default" value="Send">
                     </center>
                     <script type="text/javascript">
-                        $('#submitBtn').click(function(){
+                        $('#submitBtn').click(function () {
                             var selected = $("#example-getting-started option:selected");
+                            var list = [];
+                            selected.each(function () {
+                                list.push($(this).val())
+                            });
                             var inputTitle = $('#inputTitle').val();
                             var inputText = $('#inputText').val();
                             var inputEmail = $('#inputEmail').val();
-//                            var s = "";
-//                            s+= inputText + "\n";
-//                            s+= inputTitle + '\n';
-//                            s+= inputEmail + '\n';
-//                            selected.each(function(){
-//                                s+=$(this).text() + " " + $(this).val() + "\n";
+                            var data = {
+                                        inputTitle: inputTitle,
+                                        inputText: inputText,
+                                        inputEmail: inputEmail,
+                                        inputCategory: list
+                            };
+//                            $.ajax("/", {
+//                                method: "POST",
+//                                data: {
+//                                    inputTitle: id,
+//                                    inputText: inputText,
+//                                    inputEmail: inputEmail,
+//                                    inputCategory: list
+//                                }
 //                            });
-//                            alert(s);
+                            alert(JSON.parse(data));
+//                            alert("looool" + inputTitle);
                         });
                     </script>
                 </form>
