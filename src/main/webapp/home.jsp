@@ -10,16 +10,16 @@
 <%@ page import="java.util.Objects" %>
 <html>
 <head>
-    <script type="text/javascript" src="resources/js/jquery-2.2.1.min.js"></script>
+    <script type="text/javascript" src="static/js/jquery-2.2.1.min.js"></script>
 
-    <link rel="stylesheet" href="resources/bootstrap-3.3.6-dist/css/bootstrap.css"/>
-    <script type="text/javascript" src="resources/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="static/bootstrap-3.3.6-dist/css/bootstrap.css"/>
+    <script type="text/javascript" src="static/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
 
-    <script type="text/javascript" src="resources/dist/js/bootstrap-multiselect.js"></script>
-    <link rel="stylesheet" href="resources/dist/css/bootstrap-multiselect.css" type="text/css"/>
+    <script type="text/javascript" src="static/dist/js/bootstrap-multiselect.js"></script>
+    <link rel="stylesheet" href="static/dist/css/bootstrap-multiselect.css" type="text/css"/>
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-    <link rel="stylesheet" href="resources/css/styles.css"/>
+    <%--<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>--%>
+    <link rel="stylesheet" href="static/css/styles.css"/>
 
     <title></title>
 </head>
@@ -51,16 +51,12 @@
             <div class="page-header">
                 <h3>All posts</h3>
             </div>
-
             <% for (PostPO post : allPosts) { %>
-            <%--<div class="post">--%>
             <h2><a href="/post?id=<%= post.getId()%>"><%= post.getTitle()%>
             </a></h2>
 
             <p><%= post.getText() %>
             </p>
-            <%--</div>--%>
-
             <% } %>
         </div>
         <div class="col-md-4">
@@ -71,33 +67,48 @@
                 <form action="/" method="post">
                     <div class="form-group">
                         <select class="form-control" id="example-getting-started" multiple="multiple"
-                                name="inputCategory">
-                            <%--<option value="4" disabled selected hidden style="color: #999">Categories</option>--%>
+                                 title="Categories">
                             <% for (CategoryPO categoryPO : categoryPOs) { %>
-                            <option value="<%=categoryPO.getId()%>"><%=categoryPO.getName()%>
-                            </option>
+                            <option value="<%=categoryPO.getId()%>" ><%=categoryPO.getName()%></option>
                             <% } %>
                         </select>
                         <script type="text/javascript">
                             $(document).ready(function () {
                                 $('#example-getting-started').multiselect({
-                                    enableFiltering: true
+                                    enableFiltering: true,
+                                    buttonWidth: '100%'
                                 });
                             });
                         </script>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" name="inputTitle" placeholder="Title">
+                        <input type="text" class="form-control" id="inputTitle" placeholder="Title">
                     </div>
                     <div class="form-group">
-                        <textarea type="text" class="form-control" name="inputText" placeholder="Text"></textarea>
+                        <textarea type="text" class="form-control" id="inputText" placeholder="Text"></textarea>
                     </div>
                     <div class="form-group">
-                        <input type="email" class="form-control" name="inputEmail" placeholder="Email">
+                        <input type="email" class="form-control" id="inputEmail" placeholder="Email">
                     </div>
                     <center>
-                        <button type="submit" class="btn middle btn-default">Send</button>
+                        <input type="button" id="submitBtn" class="btn middle btn-default" value="Send">
                     </center>
+                    <script type="text/javascript">
+                        $('#submitBtn').click(function(){
+                            var selected = $("#example-getting-started option:selected");
+                            var inputTitle = $('#inputTitle').val();
+                            var inputText = $('#inputText').val();
+                            var inputEmail = $('#inputEmail').val();
+//                            var s = "";
+//                            s+= inputText + "\n";
+//                            s+= inputTitle + '\n';
+//                            s+= inputEmail + '\n';
+//                            selected.each(function(){
+//                                s+=$(this).text() + " " + $(this).val() + "\n";
+//                            });
+//                            alert(s);
+                        });
+                    </script>
                 </form>
                 <p>
             </div>

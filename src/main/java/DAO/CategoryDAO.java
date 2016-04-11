@@ -78,4 +78,21 @@ public class CategoryDAO {
         }
         return list;
     }
+
+    public static CategoryPO getCategoryById(Long cid) {
+        CategoryPO categoryPO = null;
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            categoryPO = (CategoryPO) session.get(CategoryPO.class, cid);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
+        return categoryPO;
+    }
 }
