@@ -7,17 +7,20 @@
 <%@ page import="java.sql.Timestamp" %>
 <%@ page import="java.time.Instant" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Objects" %>
 <html>
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
-          integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-            crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="resources/css/styles.css">
+    <script type="text/javascript" src="resources/js/jquery-2.2.1.min.js"></script>
+
+    <link rel="stylesheet" href="resources/bootstrap-3.3.6-dist/css/bootstrap.css"/>
+    <script type="text/javascript" src="resources/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="resources/dist/js/bootstrap-multiselect.js"></script>
+    <link rel="stylesheet" href="resources/dist/css/bootstrap-multiselect.css" type="text/css"/>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="resources/css/styles.css"/>
+
     <title></title>
 </head>
 <body>
@@ -27,16 +30,16 @@
 %>
 <%
     String inputTitle = request.getParameter("inputTitle");
-    if (inputTitle != "" && inputTitle != null) {
+    if (!Objects.equals(inputTitle, "") && inputTitle != null) {
         PostPO postPO = new PostPO();
-        Long cat = Long.valueOf(request.getParameter("inputCategory"));
+        String inputCategory = request.getParameter("inputCategory");
         String inputText = request.getParameter("inputText");
         String inputEmail = request.getParameter("inputEmail");
         Timestamp timestamp = Timestamp.from(Instant.now());
         postPO.setTitle(inputTitle);
         postPO.setText(inputText);
         postPO.setEmail(inputEmail);
-        postPO.setCategoryId(cat);
+//        postPO.setCategoryId(cat);
         postPO.setCreatedDate(timestamp);
         PostDAO.insertPost(postPO);
     }
@@ -48,6 +51,7 @@
             <div class="page-header">
                 <h3>All posts</h3>
             </div>
+
             <% for (PostPO post : allPosts) { %>
             <%--<div class="post">--%>
             <h2><a href="/post?id=<%= post.getId()%>"><%= post.getTitle()%>
@@ -60,19 +64,27 @@
             <% } %>
         </div>
         <div class="col-md-4">
-            <div style="position: fixed; width: 30%">
+            <div style="position: fixed; width: 25%">
                 <div class="page-header">
                     <h3>Add new post</h3>
                 </div>
                 <form action="/" method="post">
                     <div class="form-group">
-                        <select class="form-control" name="inputCategory">
-                            <option value="4" disabled selected hidden style="color: #999">Categories</option>
+                        <select class="form-control" id="example-getting-started" multiple="multiple"
+                                name="inputCategory">
+                            <%--<option value="4" disabled selected hidden style="color: #999">Categories</option>--%>
                             <% for (CategoryPO categoryPO : categoryPOs) { %>
                             <option value="<%=categoryPO.getId()%>"><%=categoryPO.getName()%>
                             </option>
                             <% } %>
                         </select>
+                        <script type="text/javascript">
+                            $(document).ready(function () {
+                                $('#example-getting-started').multiselect({
+                                    enableFiltering: true
+                                });
+                            });
+                        </script>
                     </div>
                     <div class="form-group">
                         <input type="text" class="form-control" name="inputTitle" placeholder="Title">

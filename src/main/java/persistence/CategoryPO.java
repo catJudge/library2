@@ -55,4 +55,12 @@ public class CategoryPO {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
+
+    public Collection<PostPO> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(Collection<PostPO> posts) {
+        this.posts = posts;
+    }
 }

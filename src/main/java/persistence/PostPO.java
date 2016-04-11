@@ -44,6 +44,14 @@ public class PostPO {
         this.id = id;
     }
 
+    public Collection<CategoryPO> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Collection<CategoryPO> categories) {
+        this.categories = categories;
+    }
+
     public String getTitle() {
         return title;
     }

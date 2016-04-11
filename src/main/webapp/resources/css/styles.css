@@ -7,14 +7,6 @@
     background: url("../images/back.jpg") no-repeat left center;
     background-size: cover;
 }
-body {
-    /*padding-left: 25px;*/
-}
-
-body {
-    padding-top: 70px;
-    padding-left: 70px;
-}
 
 .date {
     float: right;
@@ -50,4 +42,9 @@ a{
 
 .navbar {
     background: #2e284c;
+}
+
+.date {
+    float: right;
+    color: #828282;
 }

@@ -44,6 +44,24 @@ public class PostDAO {
         }
     }
 
+    public static PostPO getPostById(Long pid){
+        PostPO postPO = new PostPO();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            postPO = (PostPO) session.get(PostPO.class,pid);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
+        return postPO;
+    }
+
+
     public static List<PostPO> getAllPosts() {
         List<PostPO> list = new ArrayList<>();
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
