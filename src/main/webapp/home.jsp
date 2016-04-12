@@ -67,7 +67,7 @@
                 <form action="/" method="post">
                     <div class="form-group">
                         <select class="form-control" id="example-getting-started" multiple="multiple"
-                                title="Categories">
+                                title="Categories" name="inputCategory">
                             <% for (CategoryPO categoryPO : categoryPOs) { %>
                             <option value="<%=categoryPO.getId()%>"><%=categoryPO.getName()%>
                             </option>
@@ -83,16 +83,16 @@
                         </script>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="inputTitle" placeholder="Title">
+                        <input type="text" class="form-control" id="inputTitle" name="inputTitle" placeholder="Title">
                     </div>
                     <div class="form-group">
-                        <textarea type="text" class="form-control" id="inputText" placeholder="Text"></textarea>
+                        <textarea class="form-control" id="inputText" name="inputText" placeholder="Text"></textarea>
                     </div>
                     <div class="form-group">
-                        <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+                        <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Email">
                     </div>
                     <center>
-                        <input type="button" id="submitBtn" class="btn middle btn-default" value="Send">
+                        <input type="button" id="submitBtn" name="submitBtn" class="btn middle btn-default" value="Send">
                     </center>
                     <script type="text/javascript">
                         $('#submitBtn').click(function () {
@@ -119,7 +119,8 @@
 //                                    inputCategory: list
 //                                }
 //                            });
-                            alert(JSON.parse(data));
+                            alert(list);
+//                            alert(JSON.parse(data));
 //                            alert("looool" + inputTitle);
                         });
                     </script>

@@ -6,6 +6,9 @@
 <%@ page import="java.sql.Timestamp" %>
 <%@ page import="DAO.PostDAO" %>
 <%@ page import="DAO.CommentDAO" %>
+<%@ page import="java.util.Objects" %>
+<%@ page import="java.time.Instant" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -30,6 +33,21 @@
 %>
 <%
     Long id = Long.valueOf(request.getParameter("id"));
+    String inputTitle = request.getParameter("inputTitle");
+    if (!Objects.equals(inputTitle, "") && inputTitle != null) {
+        PostPO postPO = new PostPO();
+        String inputText = request.getParameter("inputText");
+        String inputEmail = request.getParameter("inputEmail");
+        Timestamp timestamp = Timestamp.from(Instant.now());
+        postPO.setTitle(inputTitle);
+        postPO.setText(inputText);
+        postPO.setEmail(inputEmail);
+        List<CategoryPO> list = new ArrayList<CategoryPO>();
+        list.add(categoryPO);
+        postPO.setCategories(list);
+        postPO.setCreatedDate(timestamp);
+        PostDAO.insertPost(postPO);
+    }
     posts = CategoryDAO.getPostsByCategoryId(id);
     categoryPO = CategoryDAO.getCategoryById(id);
 %>
@@ -37,7 +55,8 @@
     <div class="row">
         <div class="col-md-6">
             <div class="page-header">
-                <h3>Category <%=categoryPO.getName()%></h3>
+                <h3>Category <%=categoryPO.getName()%>
+                </h3>
             </div>
             <% for (PostPO post : posts) { %>
             <h2><a href="/post?id=<%= post.getId()%>"><%= post.getTitle()%>
@@ -48,6 +67,28 @@
             <% } %>
         </div>
         <div class="col-md-4">
+
+            <div style="position: fixed; width: 25%">
+                <div class="page-header">
+                    <h3>Add new post</h3>
+                </div>
+                <form action="/category?id=<%=id%>" method="post">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="inputTitle" name="inputTitle" placeholder="Title">
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" id="inputText" name="inputText" placeholder="Text"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Email">
+                    </div>
+                    <center>
+                        <input type="submit" id="submitBtn" name="submitBtn" class="btn middle btn-default"
+                               value="Send">
+                    </center>
+                </form>
+                <p>
+            </div>
         </div>
         <div class="col-md-2">
             <div style="position: fixed">
