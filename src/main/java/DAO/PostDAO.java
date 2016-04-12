@@ -8,7 +8,6 @@ import persistence.PostPO;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class PostDAO {
     public static Long insertPost(PostPO postPO) {
@@ -44,13 +43,13 @@ public class PostDAO {
         }
     }
 
-    public static PostPO getPostById(Long pid){
+    public static PostPO getPostById(Long pid) {
         PostPO postPO = new PostPO();
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            postPO = (PostPO) session.get(PostPO.class,pid);
+            postPO = (PostPO) session.get(PostPO.class, pid);
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {
@@ -60,7 +59,6 @@ public class PostDAO {
         }
         return postPO;
     }
-
 
     public static List<PostPO> getAllPosts() {
         List<PostPO> list = new ArrayList<>();
@@ -85,7 +83,7 @@ public class PostDAO {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            list = session.createQuery("select categories from PostPO where id=" + pid).list();
+            list = session.createQuery("select P.categories from PostPO P where P.id= :pid").setParameter("pid", pid).list();
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {

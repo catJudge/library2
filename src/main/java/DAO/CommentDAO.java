@@ -43,13 +43,13 @@ public class CommentDAO {
         }
     }
 
-    public static List<CommentPO> getCommentsByPostId(Long pid){
+    public static List<CommentPO> getCommentsByPostId(Long pid) {
         List<CommentPO> list = new ArrayList<>();
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            list = session.createQuery("from CommentPO where post.id= " + pid ).list();
+            list = session.createQuery("from CommentPO where post.id= " + pid).list();
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {

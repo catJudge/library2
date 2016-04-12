@@ -6,6 +6,7 @@
 <%@ page import="persistence.PostPO" %>
 <%@ page import="java.sql.Timestamp" %>
 <%@ page import="java.time.Instant" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Objects" %>
 <html>
@@ -33,13 +34,18 @@
     if (!Objects.equals(inputTitle, "") && inputTitle != null) {
         PostPO postPO = new PostPO();
         String inputCategory = request.getParameter("inputCategory");
+        String[] split = inputCategory.split(" ");
+        List<CategoryPO> categories = new ArrayList<CategoryPO>();
+        for (int i = 0; i < split.length; i++) {
+            categories.add(CategoryDAO.getCategoryById((Long.valueOf(split[i]))));
+        }
         String inputText = request.getParameter("inputText");
         String inputEmail = request.getParameter("inputEmail");
         Timestamp timestamp = Timestamp.from(Instant.now());
         postPO.setTitle(inputTitle);
         postPO.setText(inputText);
         postPO.setEmail(inputEmail);
-//        postPO.setCategoryId(cat);
+        postPO.setCategories(categories);
         postPO.setCreatedDate(timestamp);
         PostDAO.insertPost(postPO);
     }
@@ -52,7 +58,8 @@
                 <h3>All posts</h3>
             </div>
             <% for (PostPO post : allPosts) { %>
-            <h2><a href="/post?id=<%= post.getId()%>"><%= post.getTitle()%>
+            <h2><a href="/post?id=<%= post.getId()%>">
+                <%= post.getTitle()%>
             </a></h2>
 
             <p><%= post.getText() %>
@@ -66,8 +73,9 @@
                 </div>
                 <form action="/" method="post">
                     <div class="form-group">
+                        <input type="text" name="inputCategory" hidden value="1 3 4"/>
                         <select class="form-control" id="example-getting-started" multiple="multiple"
-                                title="Categories" name="inputCategory">
+                                title="Categories">
                             <% for (CategoryPO categoryPO : categoryPOs) { %>
                             <option value="<%=categoryPO.getId()%>"><%=categoryPO.getName()%>
                             </option>
@@ -92,36 +100,19 @@
                         <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Email">
                     </div>
                     <center>
-                        <input type="button" id="submitBtn" name="submitBtn" class="btn middle btn-default" value="Send">
+                        <input type="submit" id="submitBtn" name="submitBtn" class="btn middle btn-default"
+                               value="Send">
                     </center>
                     <script type="text/javascript">
                         $('#submitBtn').click(function () {
                             var selected = $("#example-getting-started option:selected");
+                            var s = "";
                             var list = [];
                             selected.each(function () {
+                                s += $(this).val() + " ";
                                 list.push($(this).val())
                             });
-                            var inputTitle = $('#inputTitle').val();
-                            var inputText = $('#inputText').val();
-                            var inputEmail = $('#inputEmail').val();
-                            var data = {
-                                        inputTitle: inputTitle,
-                                        inputText: inputText,
-                                        inputEmail: inputEmail,
-                                        inputCategory: list
-                            };
-//                            $.ajax("/", {
-//                                method: "POST",
-//                                data: {
-//                                    inputTitle: id,
-//                                    inputText: inputText,
-//                                    inputEmail: inputEmail,
-//                                    inputCategory: list
-//                                }
-//                            });
-                            alert(list);
-//                            alert(JSON.parse(data));
-//                            alert("looool" + inputTitle);
+                            $('input[name=inputCategory]').val(s);
                         });
                     </script>
                 </form>
