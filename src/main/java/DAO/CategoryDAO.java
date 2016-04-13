@@ -68,7 +68,7 @@ public class CategoryDAO {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            list = session.createQuery("select C.posts from CategoryPO C where C.id= :cid").setParameter("cid",cid).list();
+            list = session.createQuery("select C.posts from CategoryPO C where C.id= :cid ").setParameter("cid",cid).list();
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {

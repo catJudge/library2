@@ -3,9 +3,6 @@ package persistence;
 import javax.persistence.*;
 import java.util.Collection;
 
-/**
- * Created by ovchinnikov on 11.04.2016.
- */
 @Entity
 @Table(name = "category", schema = "", catalog = "java_task_blog")
 public class CategoryPO {
@@ -18,6 +15,7 @@ public class CategoryPO {
     @Column(name = "name", nullable = false, insertable = true, updatable = true, length = 30)
     private String name;
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
+    @OrderBy("createdDate desc ")
     private Collection<PostPO> posts;
 
     public Long getId() {

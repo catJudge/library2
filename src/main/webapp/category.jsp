@@ -1,14 +1,12 @@
+<%@ page import="DAO.CategoryDAO" %>
+<%@ page import="DAO.PostDAO" %>
 <%@ page import="persistence.CategoryPO" %>
 <%@ page import="persistence.PostPO" %>
-<%@ page import="java.util.List" %>
-<%@ page import="persistence.CommentPO" %>
-<%@ page import="DAO.CategoryDAO" %>
 <%@ page import="java.sql.Timestamp" %>
-<%@ page import="DAO.PostDAO" %>
-<%@ page import="DAO.CommentDAO" %>
-<%@ page import="java.util.Objects" %>
 <%@ page import="java.time.Instant" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Objects" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -24,6 +22,30 @@
     <link rel="stylesheet" href="static/css/styles.css"/>
 
     <title></title>
+    <script>
+        function validateTitle(input) {
+            if (input.value.length < 10) {
+                input.setCustomValidity("Input more then 10 symbols")
+            }
+            else if (input.value.length > 30) {
+                input.setCustomValidity("Input less then 30 symbols")
+            }
+            else {
+                input.setCustomValidity("");
+            }
+        }
+        function validateText(input) {
+            if (input.value.length < 30) {
+                input.setCustomValidity("Input more then 30 symbols")
+            }
+            else if (input.value.length > 600) {
+                input.setCustomValidity("Input less then 300 symbols")
+            }
+            else {
+                input.setCustomValidity("");
+            }
+        }
+    </script>
 </head>
 <body>
 <%!
@@ -74,10 +96,12 @@
                 </div>
                 <form action="/category?id=<%=id%>" method="post">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="inputTitle" name="inputTitle" placeholder="Title">
+                        <input type="text" class="form-control" id="inputTitle" name="inputTitle" placeholder="Title"
+                               required oninput="validateTitle(this)">
                     </div>
                     <div class="form-group">
-                        <textarea class="form-control" id="inputText" name="inputText" placeholder="Text"></textarea>
+                        <textarea class="form-control" id="inputText" name="inputText" placeholder="Text" required
+                                  oninput="validateText(this)"></textarea>
                     </div>
                     <div class="form-group">
                         <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Email">

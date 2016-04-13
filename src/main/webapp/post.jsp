@@ -1,13 +1,13 @@
+<%@ page import="DAO.CategoryDAO" %>
 <%@ page import="DAO.CommentDAO" %>
-<%@ page import="persistence.CommentPO" %>
-<%@ page import="java.util.List" %>
-<%@ page import="persistence.PostPO" %>
 <%@ page import="DAO.PostDAO" %>
-<%@ page import="java.util.Objects" %>
+<%@ page import="persistence.CategoryPO" %>
+<%@ page import="persistence.CommentPO" %>
+<%@ page import="persistence.PostPO" %>
 <%@ page import="java.sql.Timestamp" %>
 <%@ page import="java.time.Instant" %>
-<%@ page import="persistence.CategoryPO" %>
-<%@ page import="DAO.CategoryDAO" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Objects" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -23,6 +23,19 @@
     <link rel="stylesheet" href="static/css/styles.css"/>
 
     <title></title>
+    <script>
+        function validateComment(input) {
+            if (input.value.length < 10) {
+                input.setCustomValidity("Input more then 10 symbols")
+            }
+            else if (input.value.length > 300) {
+                input.setCustomValidity("Input less then 300 symbols")
+            }
+            else {
+                input.setCustomValidity("");
+            }
+        }
+    </script>
 </head>
 <body>
 <%!
@@ -72,7 +85,8 @@
             </div>
             <form action="/post?id=<%=id%>" method="post">
                 <div class="form-group">
-                    <input type="text" class="form-control" name="inputText" placeholder="Comment">
+                    <input type="text" class="form-control" name="inputText" placeholder="Comment" required
+                           oninput="validateComment(this)">
                 </div>
                 <center>
                     <button type="submit" class="btn middle btn-default">Send</button>

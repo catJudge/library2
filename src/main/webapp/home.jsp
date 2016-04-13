@@ -22,22 +22,52 @@
     <%--<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>--%>
     <link rel="stylesheet" href="static/css/styles.css"/>
 
+    <script>
+        function validateTitle(input) {
+            if (input.value.length < 10) {
+                input.setCustomValidity("Input more then 10 symbols")
+            }
+            else if (input.value.length > 30) {
+                input.setCustomValidity("Input less then 30 symbols")
+            }
+            else {
+                input.setCustomValidity("");
+            }
+        }
+        function validateText(input) {
+            if (input.value.length < 30) {
+                input.setCustomValidity("Input more then 30 symbols")
+            }
+            else if (input.value.length > 600) {
+                input.setCustomValidity("Input less then 300 symbols")
+            }
+            else {
+                input.setCustomValidity("");
+            }
+        }
+        function validateSelect(select){
+            var count = $("#example-getting-started :selected").length;
+            if(count == 0){
+            alert("Select the category.")}
+        }
+    </script>
+
     <title></title>
 </head>
 <body>
 <%!
     List<CategoryPO> categoryPOs = CategoryDAO.getAllCategory();
     List<PostPO> allPosts = PostDAO.getAllPosts();
+    Integer error = 0;
 %>
 <%
     String inputTitle = request.getParameter("inputTitle");
     if (!Objects.equals(inputTitle, "") && inputTitle != null) {
         PostPO postPO = new PostPO();
-        String inputCategory = request.getParameter("inputCategory");
-        String[] split = inputCategory.split(" ");
+        String[] inputCategory = request.getParameterValues("inputCategory");
         List<CategoryPO> categories = new ArrayList<CategoryPO>();
-        for (int i = 0; i < split.length; i++) {
-            categories.add(CategoryDAO.getCategoryById((Long.valueOf(split[i]))));
+        for (int i = 0; i < inputCategory.length; i++) {
+            categories.add(CategoryDAO.getCategoryById((Long.valueOf(inputCategory[i]))));
         }
         String inputText = request.getParameter("inputText");
         String inputEmail = request.getParameter("inputEmail");
@@ -73,12 +103,10 @@
                 </div>
                 <form action="/" method="post">
                     <div class="form-group">
-                        <input type="text" name="inputCategory" hidden value="1 3 4"/>
-                        <select class="form-control" id="example-getting-started" multiple="multiple"
-                                title="Categories">
+                        <select class="form-control " id="example-getting-started" multiple="multiple"
+                                title="Categories" name="inputCategory"  required>
                             <% for (CategoryPO categoryPO : categoryPOs) { %>
-                            <option value="<%=categoryPO.getId()%>"><%=categoryPO.getName()%>
-                            </option>
+                            <option value="<%=categoryPO.getId()%>"><%=categoryPO.getName()%></option>
                             <% } %>
                         </select>
                         <script type="text/javascript">
@@ -91,30 +119,21 @@
                         </script>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="inputTitle" name="inputTitle" placeholder="Title">
+                        <input type="text" class="form-control" id="inputTitle" name="inputTitle" placeholder="Title"
+                               required oninput="validateTitle(this)">
                     </div>
                     <div class="form-group">
-                        <textarea class="form-control" id="inputText" name="inputText" placeholder="Text"></textarea>
+                        <textarea class="form-control" id="inputText" name="inputText" placeholder="Text"
+                                  oninput="validateText(this)"
+                                  required></textarea>
                     </div>
                     <div class="form-group">
                         <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Email">
                     </div>
                     <center>
                         <input type="submit" id="submitBtn" name="submitBtn" class="btn middle btn-default"
-                               value="Send">
+                               value="Send" onclick="validateSelect(this)">
                     </center>
-                    <script type="text/javascript">
-                        $('#submitBtn').click(function () {
-                            var selected = $("#example-getting-started option:selected");
-                            var s = "";
-                            var list = [];
-                            selected.each(function () {
-                                s += $(this).val() + " ";
-                                list.push($(this).val())
-                            });
-                            $('input[name=inputCategory]').val(s);
-                        });
-                    </script>
                 </form>
                 <p>
             </div>

@@ -3,9 +3,6 @@ package persistence;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-/**
- * Created by ovchinnikov on 11.04.2016.
- */
 @Entity
 @Table(name = "comment", schema = "", catalog = "java_task_blog")
 public class CommentPO {

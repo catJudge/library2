@@ -4,9 +4,6 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
 
-/**
- * Created by ovchinnikov on 11.04.2016.
- */
 @Entity
 @Table(name = "post", schema = "", catalog = "java_task_blog")
 public class PostPO {
