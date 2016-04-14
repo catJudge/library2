@@ -11,16 +11,16 @@
 <%@ page import="java.util.Objects" %>
 <html>
 <head>
-    <script type="text/javascript" src="static/js/jquery-2.2.1.min.js"></script>
+    <script type="text/javascript" src="../../static/js/jquery-2.2.1.min.js"></script>
 
-    <link rel="stylesheet" href="static/bootstrap-3.3.6-dist/css/bootstrap.css"/>
-    <script type="text/javascript" src="static/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../../static/bootstrap-3.3.6-dist/css/bootstrap.css"/>
+    <script type="text/javascript" src="../../static/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
 
-    <script type="text/javascript" src="static/dist/js/bootstrap-multiselect.js"></script>
-    <link rel="stylesheet" href="static/dist/css/bootstrap-multiselect.css" type="text/css"/>
+    <script type="text/javascript" src="../../static/dist/js/bootstrap-multiselect.js"></script>
+    <link rel="stylesheet" href="../../static/dist/css/bootstrap-multiselect.css" type="text/css"/>
 
     <%--<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>--%>
-    <link rel="stylesheet" href="static/css/styles.css"/>
+    <link rel="stylesheet" href="../../static/css/styles.css"/>
 
     <script>
         function validateTitle(input) {
