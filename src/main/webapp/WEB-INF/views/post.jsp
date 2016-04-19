@@ -1,13 +1,4 @@
-<%@ page import="DAO.CategoryDAO" %>
-<%@ page import="DAO.CommentDAO" %>
-<%@ page import="DAO.PostDAO" %>
-<%@ page import="persistence.CategoryPO" %>
-<%@ page import="persistence.CommentPO" %>
-<%@ page import="persistence.PostPO" %>
-<%@ page import="java.sql.Timestamp" %>
-<%@ page import="java.time.Instant" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.Objects" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -19,7 +10,6 @@
     <script type="text/javascript" src="../../static/dist/js/bootstrap-multiselect.js"></script>
     <link rel="stylesheet" href="../../static/dist/css/bootstrap-multiselect.css" type="text/css"/>
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <link rel="stylesheet" href="../../static/css/styles.css"/>
 
     <title></title>
@@ -38,59 +28,36 @@
     </script>
 </head>
 <body>
-<%!
-    List<CategoryPO> categoryPOs = CategoryDAO.getAllCategory();
-    List<CommentPO> commentsByPostId;
-    PostPO postPO;
-%>
-<%
-    Long id = Long.valueOf(request.getParameter("id"));
-    postPO = PostDAO.getPostById(id);
-    String inputText = request.getParameter("inputText");
-    if (!Objects.equals(inputText, "") && inputText != null) {
-        CommentPO commentPO = new CommentPO();
-        Timestamp timestamp = Timestamp.from(Instant.now());
-        commentPO.setText(inputText);
-        commentPO.setCreatedDate(timestamp);
-        commentPO.setPost(postPO);
-        CommentDAO.insertComment(commentPO);
-    }
-
-    commentsByPostId = CommentDAO.getCommentsByPostId(id);
-%>
 <div class="content container">
     <div class="row">
         <div class="col-md-6">
             <div class="post">
                 <div class="date">
-                    created date: <%=postPO.getCreatedDate().toString()%>
-                    by: <%=postPO.getEmail()%>
-                </div>
+                    created date: ${postPO.createdDate}
+                    by: ${postPO.email}</div>
                 <div class="page-header">
-                    <h1><%=postPO.getTitle()%>
-                    </h1>
+                    <h2>${postPO.title}</h2>
                 </div>
-                <p><%=postPO.getText()%>
-                </p>
+                <p>${postPO.text}</p>
 
                 <h2>Comments:</h2>
-                <% for (CommentPO commentPO : commentsByPostId) { %>
-                <div class="well">
-                    <div style="color: red">
-                        anonymous <%=commentPO.getId()%>, created date: <%=commentPO.getCreatedDate()%>
+                <c:forEach var="comment" items="${comments}">
+                    <div class="well">
+                        <div style="color: red">
+                            anonymous ${comment.id}, created date: ${comment.createdDate}
+                        </div>
+                            ${comment.text}
                     </div>
-                    <%=commentPO.getText()%>
-                </div>
-                <% } %>
+                </c:forEach>
             </div>
-            <form action="/post?id=<%=id%>" method="post">
+            <form action="/post/${id}" method="post">
                 <div class="form-group">
                     <input type="text" class="form-control" name="inputText" placeholder="Comment" required
                            oninput="validateComment(this)">
                 </div>
-                <center>
+                <div style="text-align: center">
                     <button type="submit" class="btn middle btn-default">Send</button>
-                </center>
+                </div>
             </form>
         </div>
         <div class="col-md-4">
@@ -102,12 +69,11 @@
                 </div>
                 <div class="form-group">
                     <ul class="list-group">
-                        <li class="list-group-item"><a href="/">All</a></li>
-                        <% for (CategoryPO categoryPO : categoryPOs) { %>
-                        <li class="list-group-item"><a
-                                href="/category?id=<%= categoryPO.getId() %>"><%= categoryPO.getName() %>
-                        </a></li>
-                        <% } %>
+                        <li class="list-group-item"><a href="<c:url value="/"/>">All</a></li>
+                        <c:forEach var="categoryPO" items="${categoryPOs}">
+                            <li class="list-group-item"><a
+                                    href="<c:url value="/category/${categoryPO.id}"/>">${categoryPO.name}</a></li>
+                        </c:forEach>
                     </ul>
                 </div>
             </div>
