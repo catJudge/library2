@@ -27,7 +27,7 @@ public class PostController {
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @ResponseBody
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public ModelAndView addHome(@ModelAttribute("inputCategory") String[] inputCategory,
+    public ModelAndView addHome( @RequestParam("inputCategory") String[] inputCategory,
                                 @ModelAttribute("inputTitle") String inputTitle,
                                 @ModelAttribute("inputText") String inputText,
                                 @ModelAttribute("inputEmail") String inputEmail) {
